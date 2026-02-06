@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no" />
+  <meta name="x-ogp-key" content="9e3069bf-9c1c-4896-aa3a-9235258de449" />
+  <title>Cupid's Arrow 💘</title>
+  <script src="https://sdk.play.fun/sdk.js"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@400;600;700&display=swap" rel="stylesheet">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      -webkit-tap-highlight-color: transparent;
+    }
+    
+    body {
+      font-family: 'Quicksand', sans-serif;
+      background: linear-gradient(135deg, #ffe4ec 0%, #ffb6c1 50%, #ff69b4 100%);
+      min-height: 100vh;
+      overflow: hidden;
+      touch-action: none;
+    }
+    
+    #app {
+      width: 100vw;
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+    }
+    
+    #game-container {
+      position: relative;
+      width: 100%;
+      max-width: 500px;
+      aspect-ratio: 9/16;
+      max-height: 90vh;
+      background: linear-gradient(180deg, #fff5f7 0%, #ffe4ec 100%);
+      border-radius: 20px;
+      box-shadow: 0 10px 40px rgba(255, 105, 180, 0.3);
+      overflow: hidden;
+    }
+    
+    #game-canvas {
+      width: 100%;
+      height: 100%;
+      display: block;
+    }
+    
+    #ui {
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      padding: 15px 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      pointer-events: none;
+      z-index: 10;
+    }
+    
+    .score-box {
+      background: rgba(255, 255, 255, 0.9);
+      padding: 8px 16px;
+      border-radius: 20px;
+      box-shadow: 0 4px 15px rgba(255, 105, 180, 0.2);
+    }
+    
+    .score-label {
+      font-size: 11px;
+      color: #ff69b4;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+    
+    .score-value {
+      font-size: 24px;
+      font-weight: 700;
+      color: #e91e63;
+    }
+    
+    .combo-display {
+      font-size: 14px;
+      color: #ff1493;
+      font-weight: 600;
+      opacity: 0;
+      transition: opacity 0.2s;
+    }
+    
+    .combo-display.active {
+      opacity: 1;
+    }
+    
+    #menu {
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(255, 240, 245, 0.95);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      z-index: 100;
+      padding: 20px;
+      text-align: center;
+    }
+    
+    #menu.hidden {
+      display: none;
+    }
+    
+    .menu-title {
+      font-size: 42px;
+      font-weight: 700;
+      color: #e91e63;
+      margin-bottom: 10px;
+      text-shadow: 2px 2px 0 #fff;
+    }
+    
+    .menu-subtitle {
+      font-size: 16px;
+      color: #ff69b4;
+      margin-bottom: 30px;
+    }
+    
+    .menu-hearts {
+      font-size: 60px;
+      margin-bottom: 20px;
+      animation: pulse 1s ease-in-out infinite;
+    }
+    
+    @keyframes pulse {
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(1.1); }
+    }
+    
+    .play-btn {
+      background: linear-gradient(135deg, #ff69b4 0%, #e91e63 100%);
+      color: white;
+      border: none;
+      padding: 16px 48px;
+      font-size: 20px;
+      font-weight: 700;
+      font-family: 'Quicksand', sans-serif;
+      border-radius: 30px;
+      cursor: pointer;
+      box-shadow: 0 6px 20px rgba(233, 30, 99, 0.4);
+      transition: transform 0.2s, box-shadow 0.2s;
+      pointer-events: auto;
+    }
+    
+    .play-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 25px rgba(233, 30, 99, 0.5);
+    }
+    
+    .play-btn:active {
+      transform: translateY(0);
+    }
+    
+    .final-score {
+      font-size: 18px;
+      color: #e91e63;
+      margin-top: 20px;
+    }
+    
+    .instructions {
+      font-size: 14px;
+      color: #999;
+      margin-top: 20px;
+      max-width: 280px;
+    }
+    
+    #flash {
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: #ff69b4;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.1s;
+      z-index: 5;
+    }
+  </style>
+  <script type="module" crossorigin src="/cupids-arrow/assets/index-C7cmuxTw.js"></script>
+</head>
+<body>
+  <div id="app">
+    <div id="game-container">
+      <canvas id="game-canvas"></canvas>
+      <div id="flash"></div>
+      <div id="ui">
+        <div class="score-box">
+          <div class="score-label">Score</div>
+          <div class="score-value" id="score">0</div>
+        </div>
+        <div class="score-box">
+          <div class="combo-display" id="combo">x2 COMBO!</div>
+        </div>
+      </div>
+      <div id="menu">
+        <div class="menu-hearts">💘</div>
+        <h1 class="menu-title">Cupid's Arrow</h1>
+        <p class="menu-subtitle">Match the falling hearts!</p>
+        <button class="play-btn" id="play-btn">Play</button>
+        <p class="final-score" id="final-score"></p>
+        <p class="instructions">Tap or click to shoot arrows at matching hearts. Chain combos for bonus points!</p>
+      </div>
+    </div>
+  </div>
+</body>
+</html>
