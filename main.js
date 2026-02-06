@@ -19,8 +19,7 @@ if (typeof OpenGameSDK !== 'undefined') {
   ogp.on('SavePointsSuccess', () => console.log('Score saved!'));
   ogp.on('SavePointsFailed', () => console.log('Save failed'));
   
-  // Game ID will be set after registration
-  ogp.init({ gameId: 'PENDING' });
+  ogp.init({ gameId: '44ad9446-6625-4a4c-9a5f-17d81295801c' });
 }
 
 // Canvas setup
